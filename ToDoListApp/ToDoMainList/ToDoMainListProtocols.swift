@@ -6,6 +6,7 @@
 //
 
 protocol ToDoMainListViewProtocol: AnyObject {
+    func showDeleteSuccess(at index: Int)
     func showToDoItems(_ items: [CDToDoItem])
     func showError(_ message: String)
 }
@@ -23,6 +24,8 @@ protocol ToDoListInteractorOutputProtocol: AnyObject {
     func didFetchToDoItems(_ items: [ToDoItem])
     func didFailToFetchToDoItems(with error: String)
     func didFailToSaveToDoItems(with error: String)
+    func didDeleteItem(_ item: CDToDoItem)
+    func didFailToDeleteItem(error: Error)
 }
 
 // MARK: - Interactor Protocol
@@ -30,9 +33,7 @@ protocol ToDoListInteractorInputProtocol: AnyObject {
     func fetchToDoList()
     func saveToDoItems(_ items: [ToDoItem])
     func fetchCachedToDoItems() -> [CDToDoItem]
-    func deleteToDo(at index: Int)
-    func didDeleteToDo(at index: Int)
-    func didFailToDeleteToDo(at index: Int)
+    func deleteToDo(_ todo: CDToDoItem)
 }
 
 // MARK: - Router Protocol

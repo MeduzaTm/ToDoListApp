@@ -22,6 +22,13 @@ class ToDoListMainViewController: UITableViewController, ToDoMainListViewProtoco
         }
     }
     
+    func showDeleteSuccess(at index: Int) {
+        tableView.beginUpdates()
+        tableView.deleteRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        tableView.endUpdates()
+        tableView.reloadSections(IndexSet(integer: 0), with: .none)
+    }
+
     func showError(_ message: String) {
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
@@ -57,7 +64,6 @@ extension ToDoListMainViewController {
     }
     
     override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        guard let todo = presenter?.todo(at: indexPath.row) else { return nil}
         return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { suggestedActions in
             let editAction = UIAction(title: "Редактировать", image: UIImage(systemName: "pencil")) { action in
                 self.presenter?.navigate()
@@ -68,10 +74,9 @@ extension ToDoListMainViewController {
             }
             
             let deleteAction = UIAction(title: "Удалить", image: UIImage(systemName: "trash"), attributes: .destructive) { action in
-                self.presenter?.deleteToDo(todo)
+                self.presenter?.deleteToDo(at: indexPath.row)
                 tableView.reloadData()
             }
-
             return UIMenu(title: "", children: [editAction, shareAction, deleteAction])
         }
     }

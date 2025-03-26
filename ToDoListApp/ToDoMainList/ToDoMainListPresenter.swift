@@ -5,8 +5,10 @@
 //  Created by Нурик  Генджалиев   on 21.03.2025.
 //
 
+import Foundation
+
 class ToDoMainListPresenter: ToDoListPresenterProtocol, ToDoListInteractorOutputProtocol {
-    
+
     var view: ToDoMainListViewProtocol?
     var interactor: ToDoListInteractorInputProtocol?
     var router: ToDoListRouterProtocol?
@@ -37,8 +39,22 @@ class ToDoMainListPresenter: ToDoListPresenterProtocol, ToDoListInteractorOutput
         view?.showError("Save failed: \(error)")
     }
     
-    func deleteToDo(_ toDo: CDToDoItem) {
-        interactor?.deleteToDo(toDo)
+    func deleteToDo(at index: Int) {
+        guard index < cachedItems.count else { return }
+        let item = cachedItems[index]
+        interactor?.deleteToDo(item)
+    }
+    
+    func didDeleteItem(_ item: CDToDoItem) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            guard let index = self.cachedItems.firstIndex(where: { $0.id == item.id }) else {
+                self.view?.showError("Элемент не найден")
+                return
+            }
+            self.cachedItems.remove(at: index)
+            self.view?.showDeleteSuccess(at: index)
+        }
     }
     
     func numberOfTasks() -> Int {
@@ -52,4 +68,11 @@ class ToDoMainListPresenter: ToDoListPresenterProtocol, ToDoListInteractorOutput
     func navigate() {
         router?.navigateToEditTask()
     }
+    
+    func didFailToDeleteItem(error: any Error) {
+        DispatchQueue.main.async { [weak self] in
+            self?.view?.showError(error.localizedDescription)
+        }
+    }
+    
 }
