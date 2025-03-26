@@ -117,7 +117,7 @@ class ToDoMainListViewCell: UITableViewCell {
         dateFormatter.dateStyle = .short
         dateFormatter.timeStyle = .none
         
-//        dateLabel.text = dateFormatter.string(from: todoItem.creationDate )
+        dateLabel.text = dateFormatter.string(from: todoItem.creationDate ?? Date())
     }
 }
 

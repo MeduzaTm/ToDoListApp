@@ -16,7 +16,7 @@ protocol ToDoListPresenterProtocol: AnyObject {
     func numberOfTasks() -> Int
     func todo(at index: Int) -> CDToDoItem
     func navigate()
-    func deleteToDo(_ toDo: CDToDoItem)
+    func deleteToDo(at index: Int)
 }
 
 protocol ToDoListInteractorOutputProtocol: AnyObject {
@@ -30,9 +30,9 @@ protocol ToDoListInteractorInputProtocol: AnyObject {
     func fetchToDoList()
     func saveToDoItems(_ items: [ToDoItem])
     func fetchCachedToDoItems() -> [CDToDoItem]
-    func deleteToDo(_ todo: CDToDoItem)
-    func didDeleteToDo(_ todo: CDToDoItem)
-    func didFailToDeleteToDo(_ todo: CDToDoItem)
+    func deleteToDo(at index: Int)
+    func didDeleteToDo(at index: Int)
+    func didFailToDeleteToDo(at index: Int)
 }
 
 // MARK: - Router Protocol
