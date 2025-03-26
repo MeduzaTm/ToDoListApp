@@ -9,10 +9,8 @@ import Foundation
 import CoreData
 
 class ToDoMainListInteractor: ToDoListInteractorInputProtocol {
-    
     var presenter: ToDoListInteractorOutputProtocol?
     private let context = CoreDataManager.shared.context
-    
     
     func fetchToDoList() {
         guard let url = URL(string: "https://dummyjson.com/todos") else {
@@ -50,7 +48,6 @@ class ToDoMainListInteractor: ToDoListInteractorInputProtocol {
         }.resume()
     }
     
-    
     func saveToDoItems(_ items: [ToDoItem]) {
         let context = self.context
         context.perform { [weak self] in
@@ -83,7 +80,6 @@ class ToDoMainListInteractor: ToDoListInteractorInputProtocol {
     func deleteToDo(_ todo: CDToDoItem) {
         let fetchRequest: NSFetchRequest<CDToDoItem> = CDToDoItem.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %@", todo.id?.uuidString ?? "" as NSString)
-        
         do {
             let items = try context.fetch(fetchRequest)
             if let itemToDelete = items.first {
